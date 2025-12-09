@@ -1,4 +1,41 @@
-echo ".terraform/" >> .gitignore
-echo "*.tfstate" >> .gitignore
-echo "*.tfstate.backup" >> .gitignore
-echo "terraform.tfstate.d/" >> .gitignore
+# Local .terraform directories
+.terraform/
+.terraform/
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+terraform.tfstate.d/
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Ignore override files (local configuration)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore Terraform variable files
+*.tfvars
+*.tfvars.json
+
+# Ignore files that may contain sensitive data
+secret.tfvars
+*.pem
+*.key
+
+# Ignore plan files
+*.plan
+plan.out
+
+# Ignore provider directories and plugins
+.terraform/providers/
+
+# IDE / OS garbage
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
