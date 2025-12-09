@@ -1,0 +1,14 @@
+SELECT
+    replace(time_min, 'T', ' ') AS time,
+    sum(allowed) AS allowed,
+    sum(blocked) AS blocked
+FROM (
+    SELECT
+        substr(time, 1, 16) AS time_min,
+        IF(actions_executed = 'waf', 0, 1) AS allowed,
+        IF(actions_executed = 'waf', 1, 0) AS blocked
+    FROM alb_logs_full
+    WHERE (day > date_format((current_date - INTERVAL  '1' DAY), '%Y/%m/%d'))
+)
+GROUP BY time_min, allowed, blocked
+ORDER BY time desc;

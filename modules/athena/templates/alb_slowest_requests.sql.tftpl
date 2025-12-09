@@ -1,0 +1,8 @@
+SELECT
+    round(request_processing_time + target_processing_time + response_processing_time, 3) AS processing_time,
+    request_url,
+    *
+FROM alb_logs_full
+WHERE (day > date_format((current_date - INTERVAL  '${days}' DAY), '%Y/%m/%d'))
+ORDER BY processing_time DESC
+LIMIT 50;

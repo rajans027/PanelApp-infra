@@ -1,0 +1,19 @@
+SELECT
+    count(*) AS count,
+    IF(non_terminating_action IS NULL, action, non_terminating_action) AS action,
+    IF(non_terminating_rule_id IS NULL, terminating_rule_id, non_terminating_rule_id) AS rule_id,
+    client_ip,
+    cf_connecting_ip,
+    cf_ipcountry,
+    user_agent
+FROM ${from}
+GROUP BY
+    action,
+    terminating_rule_id,
+    non_terminating_rule_id,
+    non_terminating_action,
+    client_ip,
+    cf_connecting_ip,
+    cf_ipcountry,
+    user_agent
+ORDER BY count DESC

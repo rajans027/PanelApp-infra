@@ -1,0 +1,17 @@
+CREATE OR REPLACE VIEW "${view_name}" AS
+SELECT
+    log_time AS "log_time",
+    timestamp AS "timestamp",
+    terminatingruleid AS "terminating_rule_id",
+    action AS "action",
+    /* non terminating rules are only used for COUNT */
+    TRY(nonterminatingmatchingrules[1].ruleid) AS "non_terminating_rule_id",
+    TRY(nonterminatingmatchingrules[1].action) AS "non_terminating_action",
+    httprequest.clientip AS "client_ip",
+    TRY(filter(httprequest.headers, (x) -> (lower(x.name) = 'cf-connecting-ip'))[1].value) AS "cf_connecting_ip",
+    TRY(filter(httprequest.headers, (x) -> (lower(x.name) = 'cf-ipcountry'))[1].value) AS "cf_ipcountry",
+    httprequest.httpmethod AS "http_method",
+    concat(httprequest.scheme, '://', httprequest.host,httprequest.uri, httprequest.fragment) AS "request_url",
+    TRY(filter(httprequest.headers, x -> lower(x.name) = 'user-agent')[1].value) AS "user_agent"
+FROM waf_logs_full
+WHERE log_time > date_format(current_date - interval '${days}' day, '%Y/%m/%d/23/59');
